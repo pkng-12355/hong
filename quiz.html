@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>퀴즈 페이지</title>
+    <style>
+      body {
+        font-family: "Segoe UI", sans-serif;
+        background-color: #f8f9fd;
+        margin: 0;
+        padding: 0;
+      }
+
+      .container {
+        max-width: 600px;
+        margin: 50px auto;
+        background-color: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+
+      h2 {
+        color: #2e3a75;
+      }
+
+      .question {
+        margin-bottom: 20px;
+      }
+
+      .options button {
+        margin: 5px;
+        padding: 10px 20px;
+        border: 1px solid #ccc;
+        border-radius: 20px;
+        background-color: #f1f1f1;
+        cursor: pointer;
+      }
+
+      .options button.selected {
+        background-color: #d2e3fc;
+        border-color: #4f5bbd;
+      }
+
+      #checkAnswers {
+        display: block;
+        margin: 30px auto;
+        padding: 10px 30px;
+        background-color: #4f5bbd;
+        color: white;
+        border: none;
+        border-radius: 12px;
+        font-size: 1rem;
+        cursor: pointer;
+      }
+
+      /* Modal Styles */
+      .modal {
+        display: none;
+        position: fixed;
+        z-index: 10;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.5);
+        justify-content: center;
+        align-items: center;
+      }
+
+      .modal-content {
+        background-color: #fff;
+        margin: auto;
+        padding: 20px;
+        border-radius: 10px;
+        width: 90%;
+        max-width: 400px;
+        text-align: center;
+        position: relative;
+      }
+
+      #scoreValue {
+        font-size: 2rem;
+        color: #4f5bbd;
+        margin-bottom: 1rem;
+      }
+
+      #prizeForm input {
+        width: 80%;
+        margin: 10px auto;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h2>퀴즈를 풀어보세요!</h2>
+
+      <div class="question" data-answer="치타">
+        <p>1. 가장 빠른 육상 동물은?</p>
+        <div class="options">
+          <button>사자</button>
+          <button>치타</button>
+          <button>호랑이</button>
+          <button>하이에나</button>
+        </div>
+      </div>
+
+      <div class="question" data-answer="태양">
+        <p>2. 태양계에서 가장 큰 별은?</p>
+        <div class="options">
+          <button>지구</button>
+          <button>화성</button>
+          <button>목성</button>
+          <button>태양</button>
+        </div>
+      </div>
+
+      <div class="question" data-answer="에디슨">
+        <p>3. 전구를 발명한 사람은?</p>
+        <div class="options">
+          <button>아인슈타인</button>
+          <button>뉴턴</button>
+          <button>에디슨</button>
+          <button>갈릴레오</button>
+        </div>
+      </div>
+
+      <div class="question" data-answer="프랑스">
+        <p>4. 에펠탑이 있는 나라는?</p>
+        <div class="options">
+          <button>독일</button>
+          <button>프랑스</button>
+          <button>이탈리아</button>
+          <button>영국</button>
+        </div>
+      </div>
+
+      <div class="question" data-answer="물">
+        <p>5. 사람이 가장 오래 못 참는 것은?</p>
+        <div class="options">
+          <button>잠</button>
+          <button>밥</button>
+          <button>공기</button>
+          <button>물</button>
+        </div>
+      </div>
+
+      <button id="checkAnswers">정답 확인</button>
+    </div>
+
+    <div id="resultModal" class="modal">
+      <div class="modal-content">
+        <div id="scoreValue">점수 계산 중...</div>
+        <form id="prizeForm" style="display: none">
+          <input type="text" id="name" placeholder="이름 (한글만)" required />
+          <input type="email" id="email" placeholder="이메일" required />
+          <input
+            type="text"
+            id="phone"
+            placeholder="전화번호 (숫자 11자리)"
+            required
+          />
+          <button type="submit">응모하기</button>
+        </form>
+      </div>
+    </div>
+
+    <script>
+      const questions = document.querySelectorAll(".question");
+      const checkAnswersBtn = document.getElementById("checkAnswers");
+      const modal = document.getElementById("resultModal");
+      const scoreValue = document.getElementById("scoreValue");
+      const prizeForm = document.getElementById("prizeForm");
+
+      questions.forEach((q) => {
+        const buttons = q.querySelectorAll("button");
+        buttons.forEach((btn) => {
+          btn.addEventListener("click", () => {
+            buttons.forEach((b) => b.classList.remove("selected"));
+            btn.classList.add("selected");
+          });
+        });
+      });
+
+      checkAnswersBtn.addEventListener("click", () => {
+        let score = 0;
+        questions.forEach((q) => {
+          const selected = q.querySelector("button.selected");
+          if (selected && selected.textContent === q.dataset.answer) {
+            score++;
+          }
+        });
+        modal.style.display = "flex";
+        animateScore(score);
+      });
+
+      function animateScore(score) {
+        let current = 0;
+        const interval = setInterval(() => {
+          if (current >= score) {
+            clearInterval(interval);
+            setTimeout(() => {
+              scoreValue.style.display = "none";
+              prizeForm.style.display = "block";
+            }, 2000);
+          } else {
+            current++;
+            scoreValue.textContent = `맞춘 개수: ${current} / 5`;
+          }
+        }, 300);
+      }
+
+      document
+        .getElementById("prizeForm")
+        .addEventListener("submit", function (e) {
+          const name = document.getElementById("name").value.trim();
+          const email = document.getElementById("email").value.trim();
+          const phone = document.getElementById("phone").value.trim();
+
+          const koreanRegex = /^[가-힣]+$/;
+          const phoneRegex = /^\d{11}$/;
+
+          if (!koreanRegex.test(name)) {
+            alert("이름은 한글만 입력해 주세요.");
+            e.preventDefault();
+            return;
+          }
+
+          if (!phoneRegex.test(phone)) {
+            alert("전화번호는 숫자만 포함된 11자리여야 합니다.");
+            e.preventDefault();
+            return;
+          }
+
+          alert("응모가 완료되었습니다!");
+        });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Quizzical</title>
+    <style>
+      body {
+        margin: 0;
+        font-family: "Segoe UI", sans-serif;
+        background-color: #f8f9fd;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .container {
+        text-align: center;
+        z-index: 1;
+      }
+
+      h1 {
+        font-size: 2rem;
+        color: #2e3a75;
+        margin-bottom: 0.5rem;
+      }
+
+      p {
+        color: #6b7280;
+        margin-bottom: 1.5rem;
+      }
+
+      button {
+        padding: 10px 20px;
+        background-color: #4f5bbd;
+        color: white;
+        border: none;
+        border-radius: 12px;
+        font-size: 1rem;
+        cursor: pointer;
+      }
+
+      .shape-top {
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 200px;
+        height: 200px;
+        background-color: #fff9cc;
+        border-bottom-left-radius: 100%;
+        z-index: 0;
+      }
+
+      .shape-bottom {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 200px;
+        height: 200px;
+        background-color: #dceeff;
+        border-top-right-radius: 100%;
+        z-index: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="shape-top"></div>
+    <div class="shape-bottom"></div>
+
+    <div class="container">
+      <h1>Quizzical</h1>
+      <p>Some description if needed</p>
+      <button onclick="location.href='quiz.html'">Start quiz</button>
+    </div>
+  </body>
+</html>
